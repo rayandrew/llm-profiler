@@ -3,26 +3,49 @@
 source ${PROJECT_ROOT}/scripts/utils.sh
 
 module use /soft/modulefiles
-module load mpiwrappers/cray-mpich-llvm
-# module swap PrgEnv-nvhpc PrgEnv-gnu
-# module load nvhpc-mixed
-# module load llvm cray-mpich cray-pals
 
+set -e
 
 # sanity check
 log_info "Running sanity check"
-# log_info "LLVM version: $(llvm-config --version)"
-# log_info "Clang version: $(clang --version)"
+log_info "GCC version: $(gcc --version)"
 log_info "MPICH version: $(mpirun --version)"
-# export CC=$(which gcc)
-# export CXX=$(which g++)
+export CC=$(which gcc)
+export CXX=$(which g++)
 
-log_info "${blue}Installing dlio_benchmark${reset}"
+set +e
 
-# pip install dlio-profiler-py
+# check if dlio_profiler is already installed
+installed=$(python -c "import dlio_profiler" 2>&1)
+if [[ $installed == *"No module named"* ]]; then
+    set -e
+    # Install DLIO Profiler
+    log_info "Installing dlio_profiler"
+    git clone git@github.com:hariharan-devarajan/dlio-profiler.git
+    pushd dlio-profiler
+    git checkout tags/v0.0.5 -b v0.0.5
+    git apply ${PROJECT_ROOT}/scripts/dlio-profiler.patch
+    pip install .
+    popd
+    set +e
+    rm -rf dlio-profiler
+else
+    log_info "dlio_profiler is already installed, skipping installation"
+fi
 
-# Install DLIO
-pushd dlio_benchmark
-export DLIO_PROFILER_DISABLE_HWLOC=Off
-pip install .[dlio_profiler]
-popd
+installed=$(python -c "import dlio_benchmark" 2>&1)
+if [[ $installed == *"No module named"* ]]; then
+    set -e
+    # Install DLIO Benchmark
+    log_info "Installing dlio_benchmark"
+
+    git clone https://github.com/argonne-lcf/dlio_benchmark
+    pushd dlio_benchmark
+    git apply ${PROJECT_ROOT}/scripts/dlio-benchmark.patch
+    pip install .
+    dlio_benchmark ++workload.workflow.generate_data=True
+    popd
+    set +e
+else
+    log_info "dlio_benchmark is already installed, skipping installation"
+fi

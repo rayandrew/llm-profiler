@@ -160,3 +160,7 @@ cython_debug/
 #.idea/
 
 dlio_benchmark/
+dlio-profiler
+hydra_log
+checkpoints
+data

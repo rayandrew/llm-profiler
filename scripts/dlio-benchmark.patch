@@ -1,0 +1,24 @@
+diff --git a/requirements.txt b/requirements.txt
+index 343609a..103406d 100644
+--- a/requirements.txt
++++ b/requirements.txt
+@@ -8,7 +8,6 @@ astunparse==1.6.3
+ cachetools==5.2.0
+ certifi==2022.9.24
+ charset-normalizer==2.1.1
+-dlio_profiler_py==0.0.3
+ flatbuffers==23.5.26
+ gast==0.4.0
+ google-auth==2.14.1
+diff --git a/setup.py b/setup.py
+index 8dbb548..2979cda 100644
+--- a/setup.py
++++ b/setup.py
+@@ -12,7 +12,6 @@ core_deps = [
+  'h5py>=3.7.0',
+  'pandas>=1.5.1',
+  'psutil',
+- 'dlio_profiler_py==0.0.3'
+ ]
+ x86_deps = [
+  'hydra-core >= 1.2.0',

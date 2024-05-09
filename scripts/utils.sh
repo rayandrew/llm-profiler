@@ -1,3 +1,5 @@
+export ML_ENV=$PWD/.venv
+
 # colors
 blue='\033[0;34m'
 green='\033[0;32m'
