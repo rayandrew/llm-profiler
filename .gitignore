@@ -170,3 +170,6 @@ core.*
 .tmp
 plots
 *.pfw
+.direnv/
+.mamba
+
