@@ -28,7 +28,7 @@ export LIBRARY_PATH="$LIBRARY_PATH:${PROJECT_ROOT}/.venv/hwloc/lib"
 export PKG_CONFIG_PATH="${PROJECT_ROOT}/.venv/hwloc/lib/pkgconfig:$PKG_CONFIG_PATH"
 export DLIO_PROFILER_ENABLE=1
 export DLIO_PROFILER_INC_METADATA=1
-export DLIO_PROFILER_LOG_FILE=${PROJECT_ROOT}/dlio
+export DLIO_PROFILER_LOG_FILE=${PROJECT_ROOT}/log/dlio
 # export DLIO_PROFILER_INIT=preload
 
 # mpirun -np 8 dlio_benchmark workload=unet3d ++workload.workflow.generate_data=True ++workload.workflow.train=False --config-dir="$PROJECT_ROOT/configs"
@@ -39,8 +39,8 @@ export DLIO_PROFILER_LOG_FILE=${PROJECT_ROOT}/dlio
 # Colon separated paths for including for profiler
 export DLIO_PROFILER_DATA_DIR=/dev/shm/:$PWD/data:$PROJECT_ROOT/data
 # python test.py
-# python test_mnist.py
-python test2.py
+python test_mnist.py
+# python test2.py
 # mpiexec -n $NTOTRANKS --ppn $NRANKS_PER_NODE --depth=$NDEPTH --cpu-bind depth python test2.py
 # Enable profiler
 

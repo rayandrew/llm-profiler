@@ -12,6 +12,7 @@ ipython-autotime
 python-intervals>=1.10.0.post1
 zindex-py
 python-dotenv
+jupyterlab
 # dev
 black
 isort

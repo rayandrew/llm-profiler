@@ -19,7 +19,7 @@ EPOCHS = 10
 dlp_pid = os.getpid()
 log_inst = logger.initialize_log(
     logfile=f"./log/dlio/dlio_log_py_level-{dlp_pid}.pfw",
-    log_file=None,
+    # logfile=None,
     # data_dir=os.environ.get("DLIO_PROFILER_DATA_DIR", ""),
     data_dir=None,
     # process_id=-1,
@@ -30,20 +30,115 @@ io_dlp = dlp_event_logging("IO", name="real_IO")
 transform = transforms.Compose(
     [transforms.ToTensor(), transforms.Normalize((0.5,), (0.5,))]
 )
+dlp = dlp_event_logging("torch")
+
+
+class CustomFashionMNIST(torchvision.datasets.FashionMNIST):
+    @dlp.log_init
+    def __init__(
+        self,
+        root,
+        train=True,
+        transform=None,
+        target_transform=None,
+        download=False,
+    ):
+        super().__init__(
+            root=root,
+            train=train,
+            transform=transform,
+            target_transform=target_transform,
+            download=download,
+        )
+
+    @dlp.log
+    def _check_legacy_exist(self):
+        return super()._check_legacy_exist()
+
+    @dlp.log
+    def __len__(self):
+        return super().__len__()
+
+    @dlp.log
+    def _load_data(self):
+        return super()._load_data()
+
+    @dlp.log
+    def __getitem__(self, index):
+        return super().__getitem__(index)
+
+    @dlp.log
+    def download(self) -> None:
+        return super().download()
+
+
+class CustomDataLoader(DataLoader):
+    @dlp.log_init
+    def __init__(
+        self,
+        dataset,
+        batch_size=1,
+        shuffle=None,
+        sampler=None,
+        batch_sampler=None,
+        num_workers: int = 0,
+        collate_fn=None,
+        pin_memory: bool = False,
+        drop_last: bool = False,
+        timeout: float = 0,
+        worker_init_fn=None,
+        multiprocessing_context=None,
+        generator=None,
+        *,
+        prefetch_factor=None,
+        persistent_workers: bool = False,
+        pin_memory_device: str = "",
+        **kwargs,
+    ):
+        super(CustomDataLoader, self).__init__(
+            dataset=dataset,
+            batch_size=batch_size,
+            shuffle=shuffle,
+            num_workers=num_workers,
+            collate_fn=collate_fn,
+            pin_memory=pin_memory,
+            drop_last=drop_last,
+            timeout=timeout,
+            worker_init_fn=worker_init_fn,
+            multiprocessing_context=multiprocessing_context,
+            generator=generator,
+            prefetch_factor=prefetch_factor,
+            persistent_workers=persistent_workers,
+            pin_memory_device=pin_memory_device,
+            **kwargs,
+        )
+
+    @dlp.log
+    def __iter__(self):
+        return super().__iter__()
+
+    @dlp.log
+    def __next__(self):
+        return super().__next__()
+
+    @dlp.log
+    def __len__(self):
+        return super().__len__()
+
 
 # training_set = datasets.MNIST(root='./data', train=True, download=True, transform=None)
 # validation_set = datasets.MNIST(root='./data', train=False, download=True, transform=None)
-training_set = torchvision.datasets.FashionMNIST(
+training_set = CustomFashionMNIST(
     "./data", train=True, transform=transform, download=True
 )
-validation_set = torchvision.datasets.FashionMNIST(
+validation_set = CustomFashionMNIST(
     "./data", train=False, transform=transform, download=True
 )
 
-train_loader = DataLoader(
+train_loader = CustomDataLoader(
     training_set, batch_size=4, shuffle=True, num_workers=4, persistent_workers=True
 )
-test_loader = DataLoader(
+test_loader = CustomDataLoader(
     validation_set, batch_size=4, shuffle=False, num_workers=4, persistent_workers=True
 )
 

@@ -1,3 +1,29 @@
+diff --git a/dlio_profiler/logger.py b/dlio_profiler/logger.py
+index dd25838..fc9789a 100644
+--- a/dlio_profiler/logger.py
++++ b/dlio_profiler/logger.py
+@@ -229,14 +229,15 @@ class fn_interceptor(object):
+             arg_names = inspect.getfullargspec(init)[0]
+ 
+         @wraps(init)
+-        def new_init(args, *kwargs):
++        def new_init(*args, **kwargs):
+             if DLIO_PROFILER_ENABLE:
+-                for name, value in zip(arg_names[1:], kwargs):
+-                    setattr(args, name, value)
+-                    if name == "epoch":
+-                        self._arguments["epoch"] = str(value)
++                arg_values = dict(zip(arg_names[1:], args))
++                arg_values.update(kwargs)
++                if "epoch" in arg_values:
++                    arg_values["epoch"] = str(arg_values["epoch"])
++                self._arguments = arg_values
+                 start = dlio_logger.get_instance().get_time()
+-            init(args, *kwargs)
++            init(*args, **kwargs)
+             if DLIO_PROFILER_ENABLE:
+                 end = dlio_logger.get_instance().get_time()
+ 
 diff --git a/src/dlio_profiler/brahma/posix.h b/src/dlio_profiler/brahma/posix.h
 index 60a71de..6d03768 100644
 --- a/src/dlio_profiler/brahma/posix.h
