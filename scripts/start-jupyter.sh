@@ -7,9 +7,6 @@ if [ -z "$PROJECT_ROOT" ]; then
   exit 1
 fi
 
-if [ "$(hostname)" != "midnight" ]; then
-  module use /soft/modulefiles
-fi
 
 jupyter lab
 

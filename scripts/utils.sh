@@ -1,3 +1,14 @@
+
+if [ "$(hostname)" != "midnight" ]; then
+    export CC=cc
+    export CXX=CC
+fi
+
+export C_INCLUDE_PATH="${PROJECT_ROOT}/.venv/hwloc/include:$C_INCLUDE_PATH"
+export CPLUS_INCLUDE_PATH="${PROJECT_ROOT}/.venv/hwloc/include:$CPLUS_INCLUDE_PATH"
+export LIBRARY_PATH="$LIBRARY_PATH:${PROJECT_ROOT}/.venv/hwloc/lib"
+export PKG_CONFIG_PATH="${PROJECT_ROOT}/.venv/hwloc/lib/pkgconfig:$PKG_CONFIG_PATH"
+
 export ML_ENV=$PWD/.venv
 
 # colors
@@ -13,6 +24,10 @@ log_info() {
 
 log_err() {
     echo -e "${red}[E]${reset} $@"
+}
+
+log_success() {
+    echo -e "${green}[S]${reset} $@"
 }
 
 assert_eq() {

@@ -1,3 +1,4 @@
+cmake
 pandas
 numpy
 matplotlib

@@ -136,10 +136,10 @@ validation_set = CustomFashionMNIST(
 )
 
 train_loader = CustomDataLoader(
-    training_set, batch_size=4, shuffle=True, num_workers=4, persistent_workers=True
+    training_set, batch_size=64, shuffle=True, num_workers=4, persistent_workers=True
 )
 test_loader = CustomDataLoader(
-    validation_set, batch_size=4, shuffle=False, num_workers=4, persistent_workers=True
+    validation_set, batch_size=64, shuffle=False, num_workers=4, persistent_workers=True
 )
 
 classes = (

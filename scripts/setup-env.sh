@@ -21,5 +21,22 @@ fi
 
 source "${VENV_DIR}/bin/activate"
 
-export LIBRARY_PATH="$LIBRARY_PATH:${PROJECT_ROOT}/.venv/hwloc/lib"
-export PKG_CONFIG_PATH="${PROJECT_ROOT}/.venv/hwloc/lib/pkgconfig:$PKG_CONFIG_PATH"
+set +e
+
+# sanity check
+log_info "Running sanity check"
+dlio_profiler_installed=$(python -c "import dlio_profiler" 2>&1)
+if [[ $dlio_profiler_installed == *"No module named"* ]]; then
+    log_err "dlio_profiler is not installed"
+else
+    log_success "dlio_profiler is already installed, skipping installation"
+fi
+
+
+dlio_bench_installed=$(python -c "import dlio_benchmark" 2>&1)
+if [[ $dlio_bench_installed == *"No module named"* ]]; then
+    log_err "dlio_benchmark is not installed"
+else
+    log_success "dlio_benchmark is already installed, skipping installation"
+fi
+
