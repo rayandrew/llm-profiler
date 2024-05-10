@@ -1,0 +1,17 @@
+pandas
+numpy
+matplotlib
+dask[complete]
+scikit-learn
+seaborn
+jupyterlab
+fastparquet
+statsmodels
+tabulate
+ipython-autotime
+python-intervals>=1.10.0.post1
+zindex-py
+python-dotenv
+# dev
+black
+isort

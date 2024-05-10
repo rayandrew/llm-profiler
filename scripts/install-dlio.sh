@@ -28,7 +28,7 @@ if [[ $installed == *"No module named"* ]]; then
     pip install .
     popd
     set +e
-    rm -rf dlio-profiler
+    # rm -rf dlio-profiler
 else
     log_info "dlio_profiler is already installed, skipping installation"
 fi
@@ -46,6 +46,7 @@ if [[ $installed == *"No module named"* ]]; then
     dlio_benchmark ++workload.workflow.generate_data=True
     popd
     set +e
+    # rm -rf dlio_benchmark
 else
     log_info "dlio_benchmark is already installed, skipping installation"
 fi
